@@ -5,9 +5,9 @@
       
       <form @submit.prevent="handleTransfer">
         <div class="form-group">
-          <label>Select Beneficiary</label>
-          <select v-model="formData.beneficiary_id" @change="selectBeneficiary" required>
-            <option value="">Choose beneficiary...</option>
+          <label>Select Beneficiary (Optional)</label>
+          <select v-model="formData.beneficiary_id" @change="selectBeneficiary">
+            <option value="">Enter details manually...</option>
             <option
               v-for="beneficiary in beneficiaries"
               :key="beneficiary.id"
@@ -19,22 +19,23 @@
         </div>
 
         <div class="form-group">
-          <label>Beneficiary Account Number</label>
+          <label>Beneficiary Account Number *</label>
           <input
             v-model="formData.beneficiary_account_number"
             type="text"
             maxlength="10"
-            placeholder="Enter account number"
+            placeholder="Enter 10-digit account number"
             required
           />
         </div>
 
         <div class="form-group">
-          <label>Beneficiary Name</label>
+          <label>Beneficiary Name *</label>
           <input
             v-model="formData.beneficiary_name"
             type="text"
             placeholder="Enter beneficiary name"
+            required
           />
         </div>
 
@@ -135,7 +136,20 @@ async function handleTransfer() {
   loading.value = true
 
   try {
-    const response = await transactionStore.transfer(formData.value)
+    // Prepare data - only include beneficiary_id if one is selected
+    const transferData = {
+      beneficiary_account_number: formData.value.beneficiary_account_number,
+      beneficiary_name: formData.value.beneficiary_name,
+      amount: formData.value.amount,
+      transaction_pin: formData.value.transaction_pin
+    }
+
+    // Only add beneficiary_id if a beneficiary was selected from dropdown
+    if (formData.value.beneficiary_id) {
+      transferData.beneficiary_id = formData.value.beneficiary_id
+    }
+
+    const response = await transactionStore.transfer(transferData)
     successMessage.value = response.message || 'Transfer successful!'
     
     // Reset form

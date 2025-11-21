@@ -1,109 +1,205 @@
 <template>
-  <div class="dashboard">
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <h2>🏦 Bank App</h2>
-      </div>
-      <div class="navbar-user">
-        <span>{{ user?.name || 'User' }}</span>
-        <button @click="handleLogout" class="btn-logout">Logout</button>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Top Navbar -->
+    <nav class="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3">
+            <span class="text-3xl">🏦</span>
+            <h2 class="text-xl lg:text-2xl font-bold text-primary">Bank App</h2>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-700 font-medium hidden sm:inline-block">{{ user?.name || 'User' }}</span>
+            <button 
+              @click="handleLogout" 
+              class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
 
-    <div class="dashboard-content">
-      <div class="sidebar">
-        <router-link :to="`/dashboard/${route.params.userId}`" class="nav-link active">
-          <span>📊</span> Dashboard
-        </router-link>
-        <router-link to="/transfer" class="nav-link">
-          <span>💸</span> Transfer
-        </router-link>
-        <router-link to="/deposit" class="nav-link">
-          <span>💰</span> Deposit
-        </router-link>
-        <router-link to="/beneficiaries" class="nav-link">
-          <span>👥</span> Beneficiaries
-        </router-link>
-        <router-link to="/transactions" class="nav-link">
-          <span>📝</span> Transactions
-        </router-link>
-        <router-link to="/profile" class="nav-link">
-          <span>⚙️</span> Profile
-        </router-link>
-      </div>
+    <div class="flex max-w-7xl mx-auto">
+      <!-- Sidebar for Desktop -->
+      <aside class="hidden lg:block w-64 bg-white shadow-lg min-h-screen border-r border-gray-200">
+        <nav class="p-4 space-y-2">
+          <router-link 
+            :to="`/dashboard/${route.params.userId}`" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all bg-primary text-white"
+          >
+            <span class="text-xl">📊</span>
+            <span>Dashboard</span>
+          </router-link>
+          <router-link 
+            to="/transfer" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-all"
+          >
+            <span class="text-xl">💸</span>
+            <span>Transfer</span>
+          </router-link>
+          <router-link 
+            to="/deposit" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-all"
+          >
+            <span class="text-xl">💰</span>
+            <span>Deposit</span>
+          </router-link>
+          <router-link 
+            to="/beneficiaries" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-all"
+          >
+            <span class="text-xl">👥</span>
+            <span>Beneficiaries</span>
+          </router-link>
+          <router-link 
+            to="/transactions" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-all"
+          >
+            <span class="text-xl">📝</span>
+            <span>Transactions</span>
+          </router-link>
+          <router-link 
+            to="/profile" 
+            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-all"
+          >
+            <span class="text-xl">⚙️</span>
+            <span>Profile</span>
+          </router-link>
+        </nav>
+      </aside>
 
-      <div class="main-content">
-        <div v-if="loading" class="loading">Loading...</div>
+      <!-- Main Content -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8">
+        <div v-if="loading" class="flex items-center justify-center h-64">
+          <div class="text-gray-500 text-lg">Loading...</div>
+        </div>
 
-        <div v-else-if="dashboardData">
-          <!-- Account Overview -->
-          <div class="account-overview">
-            <div class="account-card balance-card">
-              <h3>Account Balance</h3>
-              <p class="balance">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
-              <p class="account-number">{{ dashboardData.user?.account_number }}</p>
+        <div v-else-if="dashboardData" class="space-y-6">
+          <!-- Account Overview Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-transform">
+              <h3 class="text-sm font-medium opacity-90 mb-2">Account Balance</h3>
+              <p class="text-3xl lg:text-4xl font-bold mb-2">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
+              <p class="text-xs opacity-75">{{ dashboardData.user?.account_number }}</p>
             </div>
 
-            <div class="account-card">
-              <h3>Account Type</h3>
-              <p class="value">{{ dashboardData.user?.account_type }}</p>
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Account Type</h3>
+              <p class="text-2xl lg:text-3xl font-bold text-gray-900 capitalize">{{ dashboardData.user?.account_type }}</p>
             </div>
 
-            <div class="account-card">
-              <h3>Total Transactions</h3>
-              <p class="value">{{ dashboardData.statistics?.total_transactions || 0 }}</p>
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Total Transactions</h3>
+              <p class="text-2xl lg:text-3xl font-bold text-gray-900">{{ dashboardData.statistics?.total_transactions || 0 }}</p>
             </div>
 
-            <div class="account-card">
-              <h3>Beneficiaries</h3>
-              <p class="value">{{ dashboardData.statistics?.beneficiaries_count || 0 }}</p>
+            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+              <h3 class="text-sm font-medium text-gray-600 mb-2">Beneficiaries</h3>
+              <p class="text-2xl lg:text-3xl font-bold text-gray-900">{{ dashboardData.statistics?.beneficiaries_count || 0 }}</p>
             </div>
           </div>
 
           <!-- Quick Actions -->
-          <div class="quick-actions">
-            <h3>Quick Actions</h3>
-            <div class="action-buttons">
-              <router-link to="/deposit" class="action-btn deposit">
-                💰 Deposit
+          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <router-link 
+                to="/deposit" 
+                class="flex items-center justify-center space-x-2 px-6 py-4 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-1"
+              >
+                <span class="text-2xl">💰</span>
+                <span>Deposit Funds</span>
               </router-link>
-              <router-link to="/transfer" class="action-btn transfer">
-                💸 Transfer
+              <router-link 
+                to="/transfer" 
+                class="flex items-center justify-center space-x-2 px-6 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-1"
+              >
+                <span class="text-2xl">💸</span>
+                <span>Transfer Money</span>
               </router-link>
             </div>
           </div>
 
           <!-- Recent Transactions -->
-          <div class="recent-transactions">
-            <h3>Recent Transactions</h3>
-            <div v-if="dashboardData.recent_transactions?.length" class="transactions-list">
+          <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h3>
+            <div v-if="dashboardData.recent_transactions?.length" class="space-y-3">
               <div
                 v-for="transaction in dashboardData.recent_transactions"
                 :key="transaction.id"
-                class="transaction-item"
-                :class="transaction.type"
+                class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border-l-4"
+                :class="transaction.type === 'deposit' ? 'border-green-500' : 'border-red-500'"
               >
-                <div class="transaction-icon">
-                  {{ transaction.type === 'deposit' ? '💰' : '💸' }}
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                       :class="transaction.type === 'deposit' ? 'bg-green-100' : 'bg-red-100'">
+                    {{ transaction.type === 'deposit' ? '💰' : '💸' }}
+                  </div>
+                  <div>
+                    <p class="font-semibold text-gray-900 capitalize">{{ transaction.type }}</p>
+                    <p class="text-sm text-gray-500">{{ formatDate(transaction.created_at) }}</p>
+                  </div>
                 </div>
-                <div class="transaction-details">
-                  <p class="transaction-type">{{ transaction.type }}</p>
-                  <p class="transaction-date">{{ formatDate(transaction.created_at) }}</p>
-                </div>
-                <div class="transaction-amount" :class="transaction.type">
-                  {{ transaction.type === 'deposit' ? '+' : '-' }}₦{{ formatAmount(transaction.amount) }}
+                <div class="text-right">
+                  <p class="font-bold text-lg lg:text-xl"
+                     :class="transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'">
+                    {{ transaction.type === 'deposit' ? '+' : '-' }}₦{{ formatAmount(transaction.amount) }}
+                  </p>
                 </div>
               </div>
             </div>
-            <p v-else class="no-data">No recent transactions</p>
+            <p v-else class="text-center text-gray-500 py-8">No recent transactions</p>
           </div>
         </div>
 
-        <div v-else class="error">
-          Failed to load dashboard data
+        <div v-else class="flex items-center justify-center h-64">
+          <div class="text-red-500 text-lg">Failed to load dashboard data</div>
         </div>
-      </div>
+      </main>
     </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+      <div class="grid grid-cols-5 h-16">
+        <router-link 
+          :to="`/dashboard/${route.params.userId}`"
+          class="flex flex-col items-center justify-center text-primary font-medium"
+        >
+          <span class="text-xl">📊</span>
+          <span class="text-xs mt-1">Dashboard</span>
+        </router-link>
+        <router-link 
+          to="/transfer"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-primary"
+        >
+          <span class="text-xl">💸</span>
+          <span class="text-xs mt-1">Transfer</span>
+        </router-link>
+        <router-link 
+          to="/deposit"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-primary"
+        >
+          <span class="text-xl">💰</span>
+          <span class="text-xs mt-1">Deposit</span>
+        </router-link>
+        <router-link 
+          to="/beneficiaries"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-primary"
+        >
+          <span class="text-xl">👥</span>
+          <span class="text-xs mt-1">Beneficiaries</span>
+        </router-link>
+        <router-link 
+          to="/profile"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-primary"
+        >
+          <span class="text-xl">⚙️</span>
+          <span class="text-xs mt-1">Profile</span>
+        </router-link>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -170,248 +266,4 @@ function formatDate(dateString) {
 }
 </script>
 
-<style scoped>
-.dashboard {
-  min-height: 100vh;
-  background: #f5f5f5;
-}
 
-.navbar {
-  background: white;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand h2 {
-  margin: 0;
-  color: #667eea;
-}
-
-.navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  color: green;
-}
-
-.btn-logout {
-  padding: 8px 16px;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn-logout:hover {
-  background: #d32f2f;
-}
-
-.dashboard-content {
-  display: flex;
-  min-height: calc(100vh - 64px);
-}
-
-.sidebar {
-  width: 250px;
-  background: white;
-  padding: 24px 0;
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  color: #666;
-  text-decoration: none;
-  transition: all 0.3s;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  background: #f0f0f0;
-  color: #667eea;
-  border-left: 3px solid #667eea;
-}
-
-.main-content {
-  flex: 1;
-  padding: 24px;
-}
-
-.loading,
-.error {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: #666;
-}
-
-.account-overview {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.account-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.account-card h3 {
-  margin: 0 0 12px 0;
-  color: #666;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.balance {
-  font-size: 32px;
-  font-weight: 700;
-  color: #667eea;
-  margin: 0;
-}
-
-.account-number {
-  font-size: 14px;
-  color: #999;
-  margin: 8px 0 0 0;
-}
-
-.value {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-  text-transform: capitalize;
-}
-
-.quick-actions {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.quick-actions h3 {
-  margin: 0 0 16px 0;
-  color: #333;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 16px;
-}
-
-.action-btn {
-  flex: 1;
-  padding: 16px;
-  border-radius: 8px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 16px;
-  transition: all 0.3s;
-}
-
-.action-btn.deposit {
-  background: #4caf50;
-  color: white;
-}
-
-.action-btn.transfer {
-  background: #2196f3;
-  color: white;
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.recent-transactions {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.recent-transactions h3 {
-  margin: 0 0 16px 0;
-  color: #333;
-}
-
-.transactions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.transaction-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border-left: 3px solid #ccc;
-}
-
-.transaction-item.deposit {
-  border-left-color: #4caf50;
-}
-
-.transaction-item.transfer {
-  border-left-color: #f44336;
-}
-
-.transaction-icon {
-  font-size: 24px;
-}
-
-.transaction-details {
-  flex: 1;
-}
-
-.transaction-type {
-  margin: 0 0 4px 0;
-  font-weight: 600;
-  color: #333;
-  text-transform: capitalize;
-}
-
-.transaction-date {
-  margin: 0;
-  font-size: 12px;
-  color: #999;
-}
-
-.transaction-amount {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.transaction-amount.deposit {
-  color: #4caf50;
-}
-
-.transaction-amount.transfer {
-  color: #f44336;
-}
-
-.no-data {
-  text-align: center;
-  color: #999;
-  padding: 20px;
-}
-</style>
