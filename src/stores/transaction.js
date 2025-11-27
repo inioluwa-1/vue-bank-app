@@ -106,6 +106,8 @@ export const useTransactionStore = defineStore('transaction', () => {
     
     try {
       const response = await transactionService.getTransactionHistory(params)
+      
+      // The response structure is { transactions: [...], meta: {...} }
       transactions.value = response.transactions || []
       
       if (response.meta) {

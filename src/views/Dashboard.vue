@@ -81,8 +81,8 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-transform">
               <h3 class="text-sm font-medium opacity-90 mb-2">Account Balance</h3>
-              <p class="text-3xl lg:text-4xl font-bold mb-2">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
-              <p class="text-xs opacity-75">{{ dashboardData.user?.account_number }}</p>
+              <p class="text-2xl lg:text-3xl font-bold mb-2 break-words">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
+              <p class="text-xs opacity-75 truncate">{{ dashboardData.user?.account_number }}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">

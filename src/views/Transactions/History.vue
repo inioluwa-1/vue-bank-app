@@ -95,8 +95,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useTransactionStore } from '@/stores/transaction'
+import { useAuthStore } from '@/stores/auth'
 
 const transactionStore = useTransactionStore()
+const authStore = useAuthStore()
 
 const filters = ref({
   type: '',
@@ -107,6 +109,7 @@ const filters = ref({
 const loading = computed(() => transactionStore.loading)
 const transactions = computed(() => transactionStore.transactions)
 const pagination = computed(() => transactionStore.pagination)
+const user = computed(() => authStore.user)
 
 onMounted(async () => {
   await fetchHistory()
