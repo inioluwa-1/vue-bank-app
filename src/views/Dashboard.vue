@@ -12,9 +12,14 @@
             <span class="text-gray-700 font-medium hidden sm:inline-block">{{ user?.name || 'User' }}</span>
             <button 
               @click="handleLogout" 
-              class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm"
+              :disabled="loggingOut"
+              class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
-              Logout
+              <svg v-if="loggingOut" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ loggingOut ? 'Logging out...' : 'Logout' }}</span>
             </button>
           </div>
         </div>
@@ -215,6 +220,7 @@ const authStore = useAuthStore()
 
 const dashboardData = ref(null)
 const loading = ref(true)
+const loggingOut = ref(false)
 
 const user = computed(() => authStore.user)
 
@@ -236,12 +242,17 @@ async function loadDashboard() {
 }
 
 async function handleLogout() {
+  loggingOut.value = true
   try {
     await authStore.logout()
+    // Small delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500))
     router.push('/login')
   } catch (error) {
     console.error('Logout error:', error)
     router.push('/login')
+  } finally {
+    loggingOut.value = false
   }
 }
 
