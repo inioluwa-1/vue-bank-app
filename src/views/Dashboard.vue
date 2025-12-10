@@ -81,10 +81,15 @@
         </div>
 
         <div v-else-if="dashboardData" class="space-y-6">
+          <!-- Welcome Greeting -->
+          <div class="mb-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Hi, {{ dashboardData.user?.name || 'User' }} 👋</h1>
+            <p class="text-gray-600 mt-1">Welcome back to your dashboard</p>
+          </div>
+
           <!-- Account Overview Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-transform">
-              <p class="text-lg font-semibold mb-3">Hi, {{ dashboardData.user?.name || 'User' }} 👋</p>
               <h3 class="text-sm font-medium opacity-90 mb-2">Account Balance</h3>
               <p class="text-2xl lg:text-3xl font-bold mb-2 break-words">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
               <p class="text-xs opacity-75 truncate">{{ dashboardData.user?.account_number }}</p>
