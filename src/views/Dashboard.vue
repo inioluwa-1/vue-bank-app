@@ -9,7 +9,6 @@
             <h2 class="text-xl lg:text-2xl font-bold text-primary">Bank App</h2>
           </div>
           <div class="flex items-center space-x-4">
-            <span class="text-gray-700 font-medium hidden sm:inline-block">{{ user?.name || 'User' }}</span>
             <button 
               @click="handleLogout" 
               :disabled="loggingOut"
@@ -85,6 +84,7 @@
           <!-- Account Overview Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-transform">
+              <p class="text-lg font-semibold mb-3">Hi, {{ dashboardData.user?.name || 'User' }} 👋</p>
               <h3 class="text-sm font-medium opacity-90 mb-2">Account Balance</h3>
               <p class="text-2xl lg:text-3xl font-bold mb-2 break-words">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
               <p class="text-xs opacity-75 truncate">{{ dashboardData.user?.account_number }}</p>
