@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 overflow-x-hidden">
     <!-- Top Navbar -->
     <nav class="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,7 +75,7 @@
       </aside>
 
       <!-- Main Content -->
-      <main class="flex-1 p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8">
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8 overflow-x-hidden w-full">
         <div v-if="loading" class="flex items-center justify-center h-64">
           <div class="text-gray-500 text-lg">Loading...</div>
         </div>
@@ -84,12 +84,11 @@
           <!-- Welcome Greeting -->
           <div class="mb-4">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Hi, {{ dashboardData.user?.name || 'User' }} 👋</h1>
-            <p class="text-gray-600 mt-1">Welcome back to your dashboard</p>
           </div>
 
           <!-- Account Overview Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-transform">
+            <div class="bg-gradient-to-br from-primary to-secondary rounded-xl p-6 text-white shadow-lg lg:transform lg:hover:scale-105 transition-transform">
               <h3 class="text-sm font-medium opacity-90 mb-2">Account Balance</h3>
               <p class="text-2xl lg:text-3xl font-bold mb-2 break-words">₦{{ formatAmount(dashboardData.user?.balance) }}</p>
               <p class="text-xs opacity-75 truncate">{{ dashboardData.user?.account_number }}</p>
